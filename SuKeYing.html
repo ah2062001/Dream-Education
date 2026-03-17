@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Su Ke Ying · IELTS result showcase</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', 'Segoe UI', Roboto, system-ui, sans-serif;
+        }
+
+        body {
+            background: #dbe2ed;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem 1rem;
+        }
+
+        /* main card – exactly like a shareable report page */
+        .share-card {
+            max-width: 1000px;
+            width: 100%;
+            background: #ffffff;
+            border-radius: 36px;
+            box-shadow: 0 30px 50px -20px #0b1f3b;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        /* header */
+        .card-header {
+            background: #13294b;
+            padding: 1.8rem 2.5rem 1.2rem 2.5rem;
+            color: white;
+            border-bottom: 5px solid #cfb87c;
+        }
+
+        .card-header h1 {
+            font-size: 2.7rem;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            line-height: 1.1;
+            text-transform: uppercase;
+            margin-bottom: 0.25rem;
+        }
+
+        .card-header .academy {
+            font-size: 1.3rem;
+            font-weight: 300;
+            letter-spacing: 2px;
+            color: #cfb87c;
+            text-transform: uppercase;
+        }
+
+        /* student/teacher row */
+        .meta-row {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            background: #f8faff;
+            padding: 1rem 2.5rem;
+            border-bottom: 1px solid #d0d9e8;
+            font-size: 1.3rem;
+            font-weight: 450;
+            color: #1d2b4b;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: baseline;
+            gap: 0.5rem;
+        }
+
+        .meta-item span.label {
+            font-weight: 600;
+            text-transform: uppercase;
+            color: #3e4e6b;
+        }
+
+        .meta-item span.value {
+            font-weight: 500;
+            border-bottom: 2px dotted #9aaec9;
+            padding-bottom: 2px;
+            min-width: 180px;
+            color: #0b1a33;
+        }
+
+        /* IELTS snapshot — clear, permanent, sharable */
+        .score-snapshot {
+            background: #f2e9db;
+            margin: 1.8rem 2.5rem 1.2rem 2.5rem;
+            padding: 1.2rem 2rem;
+            border-radius: 40px;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem 2.5rem;
+            border: 1px solid #cfb87c;
+            box-shadow: inset 0 1px 5px #fff6e5, 0 8px 12px rgba(110, 70, 20, 0.1);
+        }
+
+        .score-snapshot .label-ielt {
+            background: #13294b;
+            color: white;
+            font-weight: 600;
+            font-size: 1.0rem;
+            padding: 0.3rem 1.5rem;
+            border-radius: 40px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .score-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem 2.2rem;
+        }
+
+        .score-block {
+            display: flex;
+            align-items: baseline;
+            gap: 5px;
+            background: rgba(255,255,255,0.5);
+            padding: 0.2rem 1rem 0.2rem 0.8rem;
+            border-radius: 40px;
+        }
+
+        .score-block .skill {
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: #2f3e2c;
+        }
+
+        .score-block .value {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #13294b;
+            line-height: 1.2;
+        }
+        .score-block .value small {
+            font-size: 0.9rem;
+            font-weight: 400;
+            color: #5c4a30;
+        }
+
+        /* four skills – styled exactly like the original "REPORT CARD" commentary */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.8rem;
+            padding: 1rem 2.5rem 2rem 2.5rem;
+        }
+
+        .skill-card {
+            background: #fbfdff;
+            border-radius: 28px;
+            padding: 1.8rem 1.8rem 2rem 1.8rem;
+            box-shadow: 0 6px 16px rgba(0, 20, 40, 0.05);
+            border: 1px solid #e2eaf5;
+        }
+
+        .skill-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border-bottom: 3px solid #cfb87c;
+            padding-bottom: 0.75rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .skill-header h2 {
+            font-size: 2.0rem;
+            font-weight: 500;
+            letter-spacing: -0.5px;
+            color: #0c1d3a;
+        }
+
+        .skill-header .score-pill {
+            margin-left: auto;
+            background: #eef3fa;
+            padding: 0.2rem 1.2rem;
+            border-radius: 60px;
+            font-size: 2.0rem;
+            font-weight: 700;
+            color: #13294b;
+            border: 1px solid #b5c9e2;
+        }
+
+        /* descriptive comments — each skill gets a tailored remark, including the previous result context */
+        .skill-comment {
+            font-size: 1.1rem;
+            line-height: 1.5;
+            color: #1f2e48;
+            margin-bottom: 0.8rem;
+            font-weight: 350;
+        }
+
+        .highlight-compare {
+            display: inline-block;
+            background: #e7eef9;
+            border-radius: 20px;
+            padding: 0.2rem 1rem;
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: #1b3f6b;
+            margin-top: 0.5rem;
+            border: 1px dashed #a7bfdf;
+        }
+
+        /* shareable footer — includes a permanent link/note */
+        .share-footer {
+            padding: 1rem 2.5rem 1.8rem 2.5rem;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 2px solid #d9e2f0;
+            background: #f7faff;
+        }
+
+        .permalink-note {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            background: #e4ebf6;
+            padding: 0.5rem 1.5rem;
+            border-radius: 60px;
+            color: #13294b;
+            font-weight: 500;
+        }
+
+        .btn-share {
+            background: #13294b;
+            border: none;
+            color: white;
+            font-weight: 600;
+            padding: 0.7rem 2rem;
+            border-radius: 40px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.2s;
+            border: 1px solid #cfb87c;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-share:hover {
+            background: #1f3e6b;
+            transform: scale(1.02);
+            box-shadow: 0 8px 14px -8px #13294b;
+        }
+
+        .link-hint {
+            font-size: 0.9rem;
+            color: #5e6c88;
+        }
+
+        @media (max-width: 700px) {
+            .skills-grid {
+                grid-template-columns: 1fr;
+            }
+            .meta-row {
+                flex-direction: column;
+                gap: 0.4rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="share-card">
+        <!-- header same style as original -->
+        <div class="card-header">
+            <h1>REPORT CARD</h1>
+            <div class="academy">DREAM ACADEMY</div>
+        </div>
+
+        <!-- student / teacher exactly as given -->
+        <div class="meta-row">
+            <div class="meta-item">
+                <span class="label">Student:</span>
+                <span class="value">Su Ke Ying</span>
+            </div>
+            <div class="meta-item">
+                <span class="label">Teacher:</span>
+                <span class="value">Ameer</span>
+            </div>
+        </div>
+
+        <!-- permanent snapshot of IELTS scores – this is the stored result you can share -->
+        <div class="score-snapshot">
+            <span class="label-ielt">📋 IELTS result · previous</span>
+            <div class="score-grid">
+                <div class="score-block"><span class="skill">L</span><span class="value">3.0</span></div>
+                <div class="score-block"><span class="skill">R</span><span class="value">5.5</span></div>
+                <div class="score-block"><span class="skill">W</span><span class="value">5.0</span></div>
+                <div class="score-block"><span class="skill">S</span><span class="value">3.0</span></div>
+            </div>
+            <span style="margin-left: auto; background:white; padding:0.2rem 1.2rem; border-radius:40px; border:1px solid #b3c7df; font-weight:500;">overall 4.1</span>
+        </div>
+
+        <!-- four skills with comments (including previous score comparison) -->
+        <div class="skills-grid">
+            <!-- Speaking -->
+            <div class="skill-card">
+                <div class="skill-header">
+                    <h2>Speaking</h2>
+                    <span class="score-pill">3.0</span>
+                </div>
+                <div class="skill-comment">
+                    Su speaks using simple sentences but still lacks fluency. Participates in discussions, though confidence is low when speaking in front of others. 
+                    Needs more practice and encouragement.
+                    <div class="highlight-compare">📊 previous: 3.0 (consistent, slight progress in expression)</div>
+                </div>
+            </div>
+            <!-- Listening -->
+            <div class="skill-card">
+                <div class="skill-header">
+                    <h2>Listening</h2>
+                    <span class="score-pill">3.0</span>
+                </div>
+                <div class="skill-comment">
+                    Listens carefully and usually understands simple, slow instructions. Can follow basic classroom activities, but struggles with longer explanations or unfamiliar words.
+                    <div class="highlight-compare">👂 previous 3.0 — needs exposure to varied audio</div>
+                </div>
+            </div>
+            <!-- Reading (strong) -->
+            <div class="skill-card">
+                <div class="skill-header">
+                    <h2>Reading</h2>
+                    <span class="score-pill">5.5</span>
+                </div>
+                <div class="skill-comment">
+                    Reading is Su's strength. She reads clearly with good pronunciation and shows strong understanding of simple texts. Enjoys reading activities and reads aloud with confidence.
+                    <div class="highlight-compare">📚 previous 5.5 — maintain and build vocabulary</div>
+                </div>
+            </div>
+            <!-- Writing -->
+            <div class="skill-card">
+                <div class="skill-header">
+                    <h2>Writing</h2>
+                    <span class="score-pill">5.0</span>
+                </div>
+                <div class="skill-comment">
+                    Writes simple sentences clearly; ideas are organised logically. Demonstrates good grasp of basic vocabulary and structures. To improve, she needs to develop paragraph flow.
+                    <div class="highlight-compare">✍️ previous 5.0 — can reach 5.5 with linking words</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- shareable footer: direct link simulation (just a UI element, because it's a static page, but you can share the file / URL) -->
+        <div class="share-footer">
+            <div class="permalink-note">
+                🔗 <span id="demoLink">https://ielts.show/su-keying-3l-5.5r-5w-3s</span>
+                <span class="link-hint">(share this link)</span>
+            </div>
+            <!-- "copy link" button simulates sharing – updates dummy message -->
+            <button class="btn-share" id="copyShareBtn" onclick="simulateShare()">
+                📋 copy link
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // simple simulation to show that the link is "ready to share"
+        function simulateShare() {
+            const link = document.getElementById('demoLink').innerText;
+            // Attempt to copy to clipboard (if possible) and give feedback
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(link).then(() => {
+                    alert('✅ Link copied to clipboard!\nYou can now share it with anyone.\n\n' + link);
+                }).catch(() => {
+                    fallbackCopy();
+                });
+            } else {
+                fallbackCopy();
+            }
+        }
+
+        function fallbackCopy() {
+            const textarea = document.createElement('textarea');
+            textarea.value = document.getElementById('demoLink').innerText;
+            document.body.appendChild(textarea);
+            textarea.select();
+            try {
+                document.execCommand('copy');
+                alert('✅ Link copied! (press Ctrl+V to share)\n\n' + textarea.value);
+            } catch (err) {
+                alert('📌 Share this link manually:\n' + textarea.value);
+            }
+            document.body.removeChild(textarea);
+        }
+
+        // optional: make the whole link clickable? not needed, but nice.
+        document.getElementById('demoLink').style.cursor = 'pointer';
+        document.getElementById('demoLink').addEventListener('click', function() {
+            simulateShare();  // clicking the link also triggers copy/share hint
+        });
+    </script>
+
+    <!-- note: this is a fully self-contained page. You can put it on any static server, 
+    GitHub pages, or send the HTML file – whoever opens it sees the exact same stored result.
+    The link displayed is just a demo identifier, but you control the distribution. -->
+</body>
+</html>
