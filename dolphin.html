@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Dolphins Talk | Interactive Quiz & Exercises</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(145deg, #e0f2fe 0%, #bae6fd 100%);
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            padding: 2rem 1.5rem;
+            color: #0c4a6e;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* header & title */
+        .hero {
+            background: linear-gradient(135deg, #0f172a, #1e3a8a);
+            border-radius: 2.5rem;
+            padding: 2rem 2rem 1.8rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 20px 30px -12px rgba(0,0,0,0.3);
+            text-align: center;
+            border: 1px solid rgba(255,255,240,0.2);
+        }
+
+        .hero h1 {
+            font-size: 2.6rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            background: linear-gradient(to right, #f0f9ff, #a5f3fc);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .hero p {
+            color: #cbd5e6;
+            margin-top: 0.75rem;
+            font-size: 1.2rem;
+            font-weight: 500;
+        }
+
+        .badge {
+            display: inline-block;
+            background: #0284c7;
+            padding: 0.3rem 1rem;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: white;
+            margin-top: 1rem;
+        }
+
+        /* two-column layout for MCQs + Fill blanks */
+        .quiz-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(2px);
+            border-radius: 2rem;
+            box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            transition: transform 0.2s ease;
+            border: 1px solid rgba(255,255,255,0.7);
+        }
+
+        .card-header {
+            background: #0f2b3d;
+            padding: 1.2rem 1.8rem;
+            border-bottom: 4px solid #38bdf8;
+        }
+
+        .card-header h2 {
+            color: white;
+            font-size: 1.7rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .card-header h2 i {
+            font-size: 1.8rem;
+        }
+
+        .card-body {
+            padding: 1.8rem 2rem;
+        }
+
+        /* MCQ options */
+        .question-block {
+            margin-bottom: 1.8rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .question-text {
+            font-weight: 700;
+            font-size: 1.08rem;
+            margin-bottom: 0.8rem;
+            color: #0c4a6e;
+            background: #eef2ff;
+            padding: 0.5rem 0.9rem;
+            border-radius: 20px;
+            display: inline-block;
+        }
+
+        .options {
+            list-style: none;
+            padding-left: 1rem;
+        }
+
+        .options li {
+            margin: 0.6rem 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .options label {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            font-weight: 500;
+            color: #1e293b;
+            background: #f8fafc;
+            padding: 6px 15px;
+            border-radius: 40px;
+            transition: 0.1s;
+            width: auto;
+            border: 1px solid #cbd5e1;
+        }
+
+        .options input {
+            width: 18px;
+            height: 18px;
+            accent-color: #0284c7;
+            cursor: pointer;
+        }
+
+        /* fill blanks */
+        .fill-item {
+            margin-bottom: 1.4rem;
+            background: #f9fbfe;
+            padding: 0.8rem 1rem;
+            border-radius: 28px;
+            border-left: 6px solid #38bdf8;
+        }
+
+        .fill-sentence {
+            font-weight: 600;
+            margin-bottom: 0.6rem;
+            color: #1e293b;
+        }
+
+        .fill-input {
+            padding: 10px 16px;
+            border-radius: 60px;
+            border: 1.5px solid #cbd5e1;
+            width: 100%;
+            max-width: 320px;
+            font-size: 0.95rem;
+            outline: none;
+            transition: all 0.2s;
+            background: white;
+        }
+
+        .fill-input:focus {
+            border-color: #0284c7;
+            box-shadow: 0 0 0 3px rgba(2,132,199,0.2);
+        }
+
+        /* buttons & results */
+        .action-bar {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-top: 30px;
+            margin-bottom: 20px;
+        }
+
+        button {
+            background: #1e3a8a;
+            border: none;
+            padding: 12px 28px;
+            border-radius: 60px;
+            font-weight: 700;
+            font-size: 1rem;
+            color: white;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        button:hover {
+            background: #0f2b6d;
+            transform: translateY(-2px);
+        }
+
+        .reset-btn {
+            background: #475569;
+        }
+
+        .reset-btn:hover {
+            background: #334155;
+        }
+
+        .score-board {
+            background: #d9f0fc;
+            padding: 1rem 1.8rem;
+            border-radius: 60px;
+            font-weight: 700;
+            font-size: 1.2rem;
+            display: inline-flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .score-board span {
+            background: #0f172a;
+            padding: 4px 15px;
+            border-radius: 40px;
+            color: white;
+            margin-left: 8px;
+        }
+
+        .feedback {
+            background: #fef9c3;
+            border-radius: 28px;
+            padding: 12px 20px;
+            margin-top: 20px;
+            font-weight: 500;
+            border-left: 8px solid #eab308;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 2.5rem;
+            color: #2c5a7a;
+            font-weight: 500;
+        }
+
+        hr {
+            margin: 0.5rem 0;
+        }
+
+        @media (max-width: 700px) {
+            body {
+                padding: 1rem;
+            }
+            .card-body {
+                padding: 1.2rem;
+            }
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="hero">
+        <h1>🐬 Dolphins Talk · Reading 1</h1>
+        <p>Explore how dolphins communicate — sounds, body language & intelligence</p>
+        <div class="badge">📖 Timed Reading for Fluency | Chapter 1: Nature</div>
+    </div>
+
+    <div class="quiz-grid">
+        <!-- MULTIPLE CHOICE SECTION -->
+        <div class="card">
+            <div class="card-header">
+                <h2>📌 10 Multiple Choice Questions</h2>
+            </div>
+            <div class="card-body" id="mcqContainer">
+                <!-- dynamically generated but we will hardcode questions for clarity and stability -->
+            </div>
+        </div>
+
+        <!-- FILL IN THE BLANKS SECTION -->
+        <div class="card">
+            <div class="card-header">
+                <h2>✍️ 10 Fill in the Blanks</h2>
+            </div>
+            <div class="card-body" id="fillContainer">
+                <!-- fill blanks will be injected -->
+            </div>
+        </div>
+    </div>
+
+    <div class="action-bar">
+        <div>
+            <button id="checkBtn">✅ Check Answers & Show Scores</button>
+            <button id="resetBtn" class="reset-btn">🔄 Reset All Answers</button>
+        </div>
+        <div class="score-board" id="scoreDisplay">
+            📊 MCQ: <span id="mcqScore">0</span> / 10 &nbsp;&nbsp;|&nbsp; ✏️ Fill: <span id="fillScore">0</span> / 10
+        </div>
+    </div>
+    <div id="globalFeedback" class="feedback" style="display: none;"></div>
+    <footer>🐚 Based on "Timed Reading for Fluency" — Dolphins have a special language! 🐬</footer>
+</div>
+
+<script>
+    // ---------- MCQ DATA ----------
+    const mcqQuestions = [
+        { text: "What did scientists put between the mother dolphin and her baby?", options: ["A wall", "A telephone line", "A glass window", "A net"], correct: 1 },
+        { text: "When the mother dolphin made a sound, what did her baby do?", options: ["It swam away", "It made the same sound", "It made a different sound", "It did nothing"], correct: 1 },
+        { text: "According to the reading, what did the scientists believe about the two dolphins?", options: ["They were angry at each other", "They knew who they were talking to", "They were making noise without meaning", "They were trying to escape"], correct: 1 },
+        { text: "How do dolphins in a group communicate with each other?", options: ["By using different sounds", "By splashing water", "By swimming in circles", "By touching noses"], correct: 0 },
+        { text: "Which of the following is NOT a way dolphins communicate?", options: ["Using sounds", "Using body language", "Using their tails to splash", "Moving their mouths quickly"], correct: 2 },
+        { text: "How do dolphins use body language to 'tell' something?", options: ["By swimming very fast", "By moving their bodies in a special way", "By jumping out of the water", "By hiding behind rocks"], correct: 1 },
+        { text: "What do dolphins do with their mouths to communicate?", options: ["They sing loudly", "They open and close them quickly", "They bite each other gently", "They blow bubbles"], correct: 1 },
+        { text: "What do scientists hope to do in the future?", options: ["Teach dolphins to speak English", "Understand dolphin language", "Keep dolphins in small pools", "Stop dolphins from talking"], correct: 1 },
+        { text: "Why are dolphins considered special animals?", options: ["They can swim very fast", "They have a special way of talking", "They are the largest sea animals", "They can live for 100 years"], correct: 1 },
+        { text: "Which statement best summarizes the main idea of this reading?", options: ["Dolphins are friendly animals that like people.", "Dolphins have a complex way of communicating with each other.", "Dolphins only use sounds to talk to their babies.", "Dolphins are the smartest animals in the ocean."], correct: 1 }
+    ];
+
+    // Fill blanks data: sentence, correct word (lowercase normalized)
+    const fillBlanks = [
+        { sentence: "Scientists put a mother dolphin in one place and her baby in another place, with a ________ line between them.", correct: "telephone" },
+        { sentence: "The mother and child were ________ to each other through the line.", correct: "talking" },
+        { sentence: "One dolphin would make a ________, and the other dolphin would make the same sound.", correct: "sound" },
+        { sentence: "Scientists have known for a long time that animals can 'talk' with each other, but ________ have a special way of talking.", correct: "dolphins" },
+        { sentence: "Dolphins are very ________ animals.", correct: "smart" },
+        { sentence: "Scientists have listened to the dolphins' sounds and watched them to learn how they communicate by ________.", correct: "talking" },
+        { sentence: "Dolphins not only use sounds, but they also use ________ language.", correct: "body" },
+        { sentence: "They 'tell' something to another dolphin by moving their ________ in a special way.", correct: "body" },
+        { sentence: "They also communicate by opening and closing their ________ quickly.", correct: "mouths" },
+        { sentence: "Scientists hope to understand dolphin ________ so they can learn more about these interesting animals.", correct: "language" }
+    ];
+
+    // store user selections
+    let mcqSelections = new Array(10).fill(null); // stores index of selected option
+    let fillAnswers = new Array(10).fill("");
+
+    // Helper: render MCQ
+    function renderMCQ() {
+        const container = document.getElementById("mcqContainer");
+        container.innerHTML = "";
+        mcqQuestions.forEach((q, idx) => {
+            const qDiv = document.createElement("div");
+            qDiv.className = "question-block";
+            qDiv.id = `mcq-${idx}`;
+            const qTextSpan = document.createElement("div");
+            qTextSpan.className = "question-text";
+            qTextSpan.innerText = `${idx+1}. ${q.text}`;
+            qDiv.appendChild(qTextSpan);
+            const optsList = document.createElement("ul");
+            optsList.className = "options";
+            q.options.forEach((opt, optIdx) => {
+                const li = document.createElement("li");
+                const radio = document.createElement("input");
+                radio.type = "radio";
+                radio.name = `mcq_${idx}`;
+                radio.value = optIdx;
+                radio.id = `mcq_${idx}_opt${optIdx}`;
+                if (mcqSelections[idx] === optIdx) radio.checked = true;
+                radio.addEventListener("change", (e) => {
+                    mcqSelections[idx] = parseInt(e.target.value);
+                    updateScoresOnly(); // live update scores
+                });
+                const label = document.createElement("label");
+                label.htmlFor = `mcq_${idx}_opt${optIdx}`;
+                label.appendChild(radio);
+                label.appendChild(document.createTextNode(` ${opt}`));
+                li.appendChild(label);
+                optsList.appendChild(li);
+            });
+            qDiv.appendChild(optsList);
+            container.appendChild(qDiv);
+        });
+    }
+
+    // render fill-in-the-blanks
+    function renderFill() {
+        const container = document.getElementById("fillContainer");
+        container.innerHTML = "";
+        fillBlanks.forEach((item, idx) => {
+            const fillDiv = document.createElement("div");
+            fillDiv.className = "fill-item";
+            fillDiv.id = `fill-${idx}`;
+            const sentenceSpan = document.createElement("div");
+            sentenceSpan.className = "fill-sentence";
+            sentenceSpan.innerText = `${idx+1}. ${item.sentence}`;
+            const inputField = document.createElement("input");
+            inputField.type = "text";
+            inputField.className = "fill-input";
+            inputField.placeholder = "Type your answer...";
+            inputField.value = fillAnswers[idx];
+            inputField.addEventListener("input", (e) => {
+                fillAnswers[idx] = e.target.value.trim();
+                updateScoresOnly();
+            });
+            fillDiv.appendChild(sentenceSpan);
+            fillDiv.appendChild(inputField);
+            container.appendChild(fillDiv);
+        });
+    }
+
+    // compute mcq score
+    function computeMcqScore() {
+        let correct = 0;
+        for (let i = 0; i < mcqQuestions.length; i++) {
+            if (mcqSelections[i] !== null && mcqSelections[i] === mcqQuestions[i].correct) {
+                correct++;
+            }
+        }
+        return correct;
+    }
+
+    // compute fill score (case-insensitive, trimmed)
+    function computeFillScore() {
+        let correct = 0;
+        for (let i = 0; i < fillBlanks.length; i++) {
+            const userAns = fillAnswers[i].trim().toLowerCase();
+            const correctAns = fillBlanks[i].correct.toLowerCase();
+            if (userAns === correctAns) {
+                correct++;
+            }
+        }
+        return correct;
+    }
+
+    // update score displays without feedback popup
+    function updateScoresOnly() {
+        const mcqCor = computeMcqScore();
+        const fillCor = computeFillScore();
+        document.getElementById("mcqScore").innerText = mcqCor;
+        document.getElementById("fillScore").innerText = fillCor;
+    }
+
+    // detailed feedback (show which are wrong)
+    function showDetailedFeedback() {
+        let mcqWrongList = [];
+        for (let i = 0; i < mcqQuestions.length; i++) {
+            if (mcqSelections[i] === null) {
+                mcqWrongList.push(`${i+1}. (no answer)`);
+            } else if (mcqSelections[i] !== mcqQuestions[i].correct) {
+                const correctAnswer = mcqQuestions[i].options[mcqQuestions[i].correct];
+                mcqWrongList.push(`${i+1}. Correct: "${correctAnswer}"`);
+            }
+        }
+
+        let fillWrongList = [];
+        for (let i = 0; i < fillBlanks.length; i++) {
+            const userRaw = fillAnswers[i].trim().toLowerCase();
+            const correctRaw = fillBlanks[i].correct.toLowerCase();
+            if (userRaw !== correctRaw) {
+                fillWrongList.push(`${i+1}. Expected: "${fillBlanks[i].correct}" — Your answer: "${fillAnswers[i] || '(empty)'}"`);
+            }
+        }
+
+        let feedbackHtml = `<strong>📋 Score Summary</strong><br>✅ MCQ: ${computeMcqScore()}/10 &nbsp;| ✏️ Fill: ${computeFillScore()}/10<br>`;
+        if (mcqWrongList.length > 0) {
+            feedbackHtml += `<hr><strong>🔍 MCQ Mistakes:</strong><br>${mcqWrongList.map(w => `• ${w}`).join('<br>')}<br>`;
+        } else {
+            feedbackHtml += `<hr><strong>🏆 Perfect MCQs! Great job!</strong><br>`;
+        }
+        if (fillWrongList.length > 0) {
+            feedbackHtml += `<hr><strong>📝 Fill in the Blanks Mistakes:</strong><br>${fillWrongList.map(w => `• ${w}`).join('<br>')}<br>`;
+        } else {
+            feedbackHtml += `<hr><strong>🎉 All fill-in answers correct! Excellent memory.</strong><br>`;
+        }
+        const feedbackDiv = document.getElementById("globalFeedback");
+        feedbackDiv.innerHTML = feedbackHtml;
+        feedbackDiv.style.display = "block";
+        // scroll a bit
+        feedbackDiv.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
+
+    // reset everything
+    function resetAll() {
+        // reset selections
+        for (let i = 0; i < mcqSelections.length; i++) {
+            mcqSelections[i] = null;
+        }
+        // reset fill answers array
+        for (let i = 0; i < fillAnswers.length; i++) {
+            fillAnswers[i] = "";
+        }
+        // re-render UI
+        renderMCQ();
+        renderFill();
+        updateScoresOnly();
+        const feedbackDiv = document.getElementById("globalFeedback");
+        feedbackDiv.style.display = "none";
+        feedbackDiv.innerHTML = "";
+    }
+
+    // on check: update scores, show detailed feedback
+    function checkAndShow() {
+        updateScoresOnly();
+        showDetailedFeedback();
+    }
+
+    // event binding and initialization
+    document.addEventListener("DOMContentLoaded", () => {
+        renderMCQ();
+        renderFill();
+        updateScoresOnly();
+
+        const checkBtn = document.getElementById("checkBtn");
+        const resetBtn = document.getElementById("resetBtn");
+        checkBtn.addEventListener("click", checkAndShow);
+        resetBtn.addEventListener("click", resetAll);
+    });
+</script>
+</body>
+</html>
