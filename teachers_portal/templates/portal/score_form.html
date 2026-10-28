@@ -1,0 +1,6 @@
+{% extends 'portal/base.html' %}
+{% block title %}{% if mode == "edit" %}Edit Score{% else %}Add Score{% endif %}{% endblock %}
+{% block breadcrumbs %} / Teacher portal / Add test score{% endblock %}
+{% block content %}
+<div class="panel"><div class="panel-header"><div><h1 class="page-title">{% if mode == "edit" %}Edit Test Score{% else %}Add Test Score{% endif %}</h1><div class="muted">Student: {{ student.full_name }}</div></div><a class="btn secondary" href="{% url 'portal:student_detail' student.pk %}">Back to student</a></div><div class="panel-body"><form method="post">{% csrf_token %}{{ form.as_p }}<button type="submit">{% if mode == "edit" %}Update score{% else %}Save score{% endif %}</button></form></div></div>
+{% endblock %}

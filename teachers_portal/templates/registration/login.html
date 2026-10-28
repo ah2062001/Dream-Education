@@ -1,0 +1,6 @@
+{% extends 'portal/base.html' %}
+{% block title %}Login | Teachers Portal{% endblock %}
+{% block breadcrumbs %} / Portal login{% endblock %}
+{% block content %}
+<div class="login-shell"><div class="panel"><div class="panel-header"><div><h1 class="page-title">Portal Login</h1><div class="muted">Sign in as admin or teacher. Use Log out in the top right to switch accounts cleanly.</div></div></div><div class="panel-body"><form method="post">{% csrf_token %}{{ form.as_p }}{% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}<button type="submit">Sign in</button></form></div></div></div>
+{% endblock %}

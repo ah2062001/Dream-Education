@@ -1,0 +1,6 @@
+{% extends 'portal/base.html' %}
+{% block title %}Add Update{% endblock %}
+{% block breadcrumbs %} / Teacher portal / Add progress update{% endblock %}
+{% block content %}
+<div class="panel"><div class="panel-header"><div><h1 class="page-title">Add Progress Update</h1><div class="muted">Student: {{ student.full_name }}</div></div><a class="btn secondary" href="{% url 'portal:student_detail' student.pk %}">Back to student</a></div><div class="panel-body"><form method="post">{% csrf_token %}{{ form.as_p }}<button type="submit">Save update</button></form></div></div>
+{% endblock %}

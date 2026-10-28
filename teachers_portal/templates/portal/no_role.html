@@ -1,0 +1,17 @@
+{% extends 'portal/base.html' %}
+{% block title %}Access Setup Required | Teachers Portal{% endblock %}
+{% block breadcrumbs %} / Access setup required{% endblock %}
+{% block content %}
+<div class="panel">
+  <div class="panel-header">
+    <div>
+      <h1 class="page-title">Access setup required</h1>
+      <div class="muted">This account is logged in, but it has not been assigned a teacher profile yet.</div>
+    </div>
+  </div>
+  <div class="panel-body">
+    <p>Please ask the admin to create a Teacher Profile for this user in Django Admin.</p>
+    <p><a class="btn" href="/admin/portal/teacherprofile/add/">Create teacher profile</a> <a class="btn secondary" href="{% url 'logout' %}">Log out</a></p>
+  </div>
+</div>
+{% endblock %}

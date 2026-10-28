@@ -1,0 +1,40 @@
+Teachers Portal V9 Setup Guide
+
+New in V9
+- Schedule Google Sheet remains separate for teacher timetable/calendar data.
+- New Student Progress Google Sheet sync added.
+- Student progress comments, class marks, weekly assessments, and monthly assessments can now sync to a separate workbook.
+
+Required Google Sheets
+1. DreamEdu Schedule System
+   - Schedule_Raw
+   - Weekly_Timetable_View
+   - Monthly_Calendar_View
+
+2. DreamEdu Student Progress System
+   - Students_Master
+   - Daily_Progress_Raw
+   - Weekly_Assessments
+   - Monthly_Assessments
+
+Important
+- Both Google Sheets must be shared with the service account email from credentials.json.
+- credentials.json must be placed in the same folder as manage.py.
+
+Run V9
+python -m venv venv
+venv\Scripts\activate
+pip install -r requirements.txt
+python manage.py migrate
+python manage.py runserver
+
+Manual Sync Test
+python manage.py shell
+from portal.utils.google_sync import sync_schedule_raw
+from portal.utils.student_sync import sync_students_workbook
+sync_schedule_raw()
+sync_students_workbook()
+
+Automation
+- Schedule sync runs when admin creates/edits/deletes TeachingSchedule.
+- Student workbook sync runs when teacher/admin creates/edits/deletes Student, ClassUpdate, or TestScore.

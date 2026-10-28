@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Teachers Portal{% endblock %}</title>
+    <style>
+        :root {--header:#417690;--nav-dark:#264b5d;--surface:#ffffff;--border:#d9d9d9;--bg:#f4f4f4;--muted:#666;--text:#222;--link:#447e9b;--button:#79aec8;}
+        *{box-sizing:border-box} body{margin:0;font-family:"Segoe UI",Arial,sans-serif;background:var(--bg);color:var(--text)}
+        a{color:var(--link);text-decoration:none} a:hover{text-decoration:underline}
+        .header{background:var(--header);color:#f5dd5d;padding:16px 28px;display:flex;justify-content:space-between;align-items:center;gap:16px}
+        .header .brand{font-size:22px;font-weight:300} .header .userbar{color:#fff;font-size:12px;text-transform:uppercase}.header .userbar a{color:#fff}
+        .subheader{background:var(--nav-dark);color:#fff;padding:12px 28px;font-size:14px}.subheader a{color:#fff}
+        .layout{display:grid;grid-template-columns:280px minmax(0,1fr);gap:20px;padding:20px 24px 32px}
+        .sidebar,.content{min-width:0}.filter-box{width:100%;border:1px solid #ccc;padding:10px 12px;background:#f3f3f3;color:#888}
+        .nav-section-title{background:var(--header);color:#fff;padding:10px 14px;font-size:14px;font-weight:700;text-transform:uppercase;border:1px solid #2e6078;border-top:none}
+        .nav-list{list-style:none;margin:0 0 18px;padding:0;border:1px solid var(--border);border-top:none;background:#fff}
+        .nav-list li{border-top:1px solid #eee}.nav-list li:first-child{border-top:none}
+        .nav-list a,.nav-list span{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;color:#205067;font-size:14px;font-weight:500}
+        .nav-list a.active{background:#f6f6c4;color:#1f3d4d}.plus{color:#5b8d2f;font-weight:700}
+        .message{background:#dfd;border:1px solid #a6dba0;color:#2f6627;padding:14px 18px;margin-bottom:16px}
+        .panel{background:#fff;border:1px solid var(--border);margin-bottom:18px}.panel-header{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:18px 18px 0}
+        .panel-body{padding:18px}.page-title{font-size:32px;font-weight:300;margin:0 0 8px;color:#333}.muted{color:var(--muted)}
+        .toolbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+        .btn,button,input[type=submit]{background:var(--button);border:1px solid #609ab6;color:#fff;padding:10px 14px;font-size:13px;font-weight:700;border-radius:4px;cursor:pointer;text-transform:uppercase;letter-spacing:.02em}
+        .btn.secondary,.button-secondary{background:#f8f8f8;border:1px solid #d0d0d0;color:#444}
+        .stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-bottom:18px}
+        .stat-card{background:#fff;border:1px solid var(--border);padding:18px}.stat-label{color:#666;font-size:13px;text-transform:uppercase}.stat-value{font-size:30px;font-weight:300;margin-top:8px}
+        .record-list{border:1px solid var(--border);background:#fff}.record-item{display:block;padding:14px 16px;border-top:1px solid #eee;color:inherit;text-decoration:none;background:#fff}.record-item:first-child{border-top:none}.record-item:hover{background:#f9f9f9;text-decoration:none}
+        .record-title{font-size:18px;margin:0 0 8px;font-weight:400;color:#205067}.meta-row{display:flex;gap:10px;flex-wrap:wrap;font-size:13px;color:#666}.tag{display:inline-block;border:1px solid #cfd8dc;background:#f9fbfc;padding:4px 8px;border-radius:10px;font-size:12px;color:#405960}
+        table{width:100%;border-collapse:collapse;background:#fff}th,td{padding:12px 10px;border-bottom:1px solid #eee;vertical-align:top}th{background:#f8f8f8;color:#666;font-size:12px;text-transform:uppercase;letter-spacing:.03em;font-weight:700}
+        form p{margin:0 0 16px}form label{display:block;font-weight:700;margin-bottom:6px}form input[type=text],form input[type=password],form input[type=date],form input[type=time],form input[type=number],form textarea,form select{width:100%;padding:10px 12px;border:1px solid #ccc;background:#fff;font:inherit}form textarea{min-height:100px}
+        .calendar-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:10px}.calendar-header{background:var(--header);color:#fff;text-align:center;padding:10px;font-weight:700;font-size:13px}.day-cell{min-height:180px;background:#fff;border:1px solid var(--border);padding:10px}.day-cell.muted-day{background:#f6f6f6;color:#999}.day-number{font-weight:700;margin-bottom:10px;display:flex;justify-content:space-between;gap:8px}.today-badge{background:#f5dd5d;color:#333;font-size:11px;padding:2px 6px}.event{border:1px solid #c7dbe4;background:#edf5f8;padding:8px;margin-bottom:8px;font-size:12px;line-height:1.45}.empty{color:#777;font-size:13px}.login-shell{max-width:560px;margin:48px auto}
+        @media (max-width:1100px){.layout{grid-template-columns:1fr}.calendar-grid{grid-template-columns:repeat(2,1fr)}} @media (max-width:700px){.header,.subheader{padding-left:16px;padding-right:16px}.layout{padding:16px}.calendar-grid{grid-template-columns:1fr}}
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <div class="header">
+        <div class="brand">Dream Edu Teachers Portal</div>
+        <div class="userbar">
+            {% if request.user.is_authenticated %}
+                Welcome, <strong>{{ request.user.username }}</strong>.
+                {% if request.user.is_superuser or request.user.is_staff %}<a href="/admin/">View site</a> / {% endif %}
+                <a href="/admin/password_change/">Change password</a> /
+                <a href="{% url 'logout' %}">Log out</a>
+            {% else %}
+                <a href="{% url 'login' %}">Log in</a>
+            {% endif %}
+        </div>
+    </div>
+    <div class="subheader"><a href="{% url 'portal:landing' %}">Home</a>{% block breadcrumbs %}{% endblock %}</div>
+    {% if messages %}<div style="padding: 12px 24px 0;">{% for message in messages %}<div class="message">{{ message }}</div>{% endfor %}</div>{% endif %}
+    <div class="layout">
+        {% if request.user.is_authenticated %}
+        <aside class="sidebar">
+            <input class="filter-box" type="text" value="Start typing to filter..." readonly>
+            {% if request.user.is_superuser or request.user.is_staff %}
+            <div class="nav-section-title">Authentication and Authorization</div>
+            <ul class="nav-list">
+                <li><a href="/admin/auth/group/">Groups <span class="plus">+ Add</span></a></li>
+                <li><a href="/admin/auth/user/">Users <span class="plus">+ Add</span></a></li>
+            </ul>
+            <div class="nav-section-title">Portal</div>
+            <ul class="nav-list">
+                <li><a href="/admin/portal/classupdate/">Class updates <span class="plus">+ Add</span></a></li>
+                <li><a href="/admin/portal/student/">Students <span class="plus">+ Add</span></a></li>
+                <li><a href="/admin/portal/teacherprofile/">Teacher profiles <span class="plus">+ Add</span></a></li>
+                <li><a class="active" href="/admin/portal/teachingschedule/">Teaching schedules <span class="plus">+ Add</span></a></li>
+                <li><a href="/admin/portal/testscore/">Test scores <span class="plus">+ Add</span></a></li>
+            </ul>
+            {% endif %}
+            {% if request.user.is_authenticated and request.user.teacher_profile %}
+            <div class="nav-section-title">Teacher Portal</div>
+            <ul class="nav-list">
+                <li><a {% if request.path == '/dashboard/' %}class="active"{% endif %} href="{% url 'portal:teacher_dashboard' %}">Dashboard</a></li>
+                <li><a {% if '/schedule/' in request.path %}class="active"{% endif %} href="{% url 'portal:schedule_calendar' %}">Monthly Schedule</a></li>
+                <li><a {% if '/students/new/' in request.path %}class="active"{% endif %} href="{% url 'portal:student_create' %}">Add Student</a></li>
+            </ul>
+            {% endif %}
+        </aside>
+        {% endif %}
+        <main class="content">{% block content %}{% endblock %}</main>
+    </div>
+</body>
+</html>

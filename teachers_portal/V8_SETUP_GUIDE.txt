@@ -1,0 +1,42 @@
+
+# Teachers Portal V8
+
+## New Features
+- Improved login/logout stability
+- Google Sheets schedule sync
+- Schedule-only spreadsheet architecture
+- Calendar/timetable support
+- Cleaner schedule management structure
+
+## Google Sheets Integration
+
+1. Create Google Cloud project
+2. Enable:
+   - Google Sheets API
+   - Google Drive API
+3. Create service account
+4. Download credentials JSON
+5. Rename to:
+   credentials.json
+6. Place in project root
+
+## Install Packages
+
+pip install -r requirements.txt
+
+## Run
+
+python manage.py migrate
+python manage.py runserver
+
+## Sync Schedules
+
+Open Django shell:
+
+python manage.py shell
+
+Then:
+
+from portal.utils.google_sync import sync_schedule_raw
+sync_schedule_raw()
+

@@ -1,0 +1,30 @@
+Teachers Portal V10 Clean
+
+This version is based on V9 UI.
+Only these changes were added:
+- Student Type dropdown: Math, Science, English, IELTS
+- Customized PDF report depending on student type
+- Dream Education logo in PDF report only
+- Student type included in Google Sheets sync
+
+No UI redesign was applied.
+
+Run:
+python -m venv venv
+venv\Scripts\activate
+pip install -r requirements.txt
+python manage.py migrate
+python manage.py seed_demo
+python manage.py runserver
+
+If upgrading from older database:
+python manage.py migrate
+
+Google Sheets:
+Copy credentials.json beside manage.py.
+Then test:
+python manage.py shell
+from portal.utils.google_sync import sync_schedule_raw
+sync_schedule_raw()
+from portal.utils.student_sync import sync_students_workbook
+sync_students_workbook()

@@ -1,0 +1,6 @@
+{% extends 'portal/base.html' %}
+{% block title %}Add Student{% endblock %}
+{% block breadcrumbs %} / Teacher portal / Add student{% endblock %}
+{% block content %}
+<div class="panel"><div class="panel-header"><div><h1 class="page-title">Add New Student</h1><div class="muted">Create a dedicated record page for this student.</div></div><a class="btn secondary" href="{% url 'portal:teacher_dashboard' %}">Back</a></div><div class="panel-body"><form method="post">{% csrf_token %}{{ form.as_p }}<button type="submit">Save student</button></form></div></div>
+{% endblock %}
